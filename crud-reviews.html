@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>-C-R-U-D- | #EffortlessReviews</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#f8f8f6;
+  --bg2:#f0f0ed;
+  --black:#0a0a0a;
+  --black2:#111111;
+  --black3:#1c1c1c;
+  --mid:#4a4a4a;
+  --muted:#9a9a9a;
+  --border:rgba(0,0,0,0.1);
+  --border2:rgba(0,0,0,0.06);
+  --white:#ffffff;
+  --font:'Poppins',sans-serif;
+  --ease:cubic-bezier(.25,.46,.45,.94);
+  --bounce:cubic-bezier(.34,1.56,.64,1);
+  --radius:16px;
+  --radius-sm:10px;
+  --radius-pill:100px;
+}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{font-family:var(--font);background:var(--bg);color:var(--black);overflow-x:hidden;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.2);border-radius:4px;}
+
+/* GRID BG */
+.grid-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.1) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,0,0,0.1) 1px,transparent 1px);
+  background-size:55px 55px;
+}
+.grid-fade{
+  position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(ellipse 90% 70% at 50% 5%,transparent 20%,var(--bg) 85%);
+}
+.grid-dark{
+  background-image:
+    linear-gradient(rgba(255,255,255,0.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.07) 1px,transparent 1px);
+  background-size:55px 55px;
+}
+.grid-dark-fade{
+  background:radial-gradient(ellipse 100% 60% at 50% 100%,transparent 30%,var(--black) 100%);
+}
+
+/* NAVBAR */
+nav{
+  position:fixed;top:0;left:0;width:100%;z-index:1000;
+  padding:0 5%;height:68px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(248,248,246,0.75);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border2);
+  transition:background .4s,box-shadow .4s;
+}
+nav.scrolled{background:rgba(248,248,246,0.96);box-shadow:0 1px 0 var(--border);}
+.nav-logo{
+  font-size:.95rem;font-weight:900;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--black);text-decoration:none;display:flex;align-items:center;gap:.5rem;
+}
+.nav-star-box{
+  width:24px;height:24px;background:var(--black);color:var(--white);
+  border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.55rem;
+}
+.nav-links{
+  display:flex;gap:2.5rem;list-style:none;
+  position:absolute;left:50%;transform:translateX(-50%);
+}
+.nav-links a{
+  color:var(--mid);text-decoration:none;font-size:.75rem;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;position:relative;transition:color .3s;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-3px;left:0;
+  width:0;height:2px;background:var(--black);border-radius:2px;transition:width .3s var(--ease);
+}
+.nav-links a:hover{color:var(--black);}
+.nav-links a:hover::after{width:100%;}
+.nav-ctas{display:flex;gap:.6rem;align-items:center;}
+.btn-ghost{
+  padding:.48rem 1.15rem;border:1.5px solid var(--border);background:transparent;
+  color:var(--black);font-family:var(--font);font-size:.7rem;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;cursor:pointer;border-radius:var(--radius-pill);transition:all .3s;text-decoration:none;
+}
+.btn-ghost:hover{border-color:rgba(0,0,0,.3);background:rgba(0,0,0,.04);}
+.btn-dark{
+  padding:.48rem 1.15rem;border:1.5px solid var(--black);background:var(--black);
+  color:var(--white);font-family:var(--font);font-size:.7rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;cursor:pointer;border-radius:var(--radius-pill);transition:all .3s;text-decoration:none;display:inline-block;
+}
+.btn-dark:hover{background:var(--black3);border-color:var(--black3);}
+
+/* HERO */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;text-align:center;
+  padding:7rem 6% 5rem;position:relative;overflow:hidden;
+}
+.hero-glow{
+  position:absolute;top:-10%;left:50%;transform:translateX(-50%);
+  width:1100px;height:700px;pointer-events:none;z-index:2;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 20%, rgba(180,180,160,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(160,160,140,0.10) 0%, transparent 70%);
+}
+/* Inner bloom that tracks mouse */
+.hero-halo{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);
+  width:750px;height:420px;pointer-events:none;z-index:2;
+  background:radial-gradient(ellipse 55% 50% at 50% 50%,
+    rgba(210,210,195,0.35) 0%,
+    rgba(200,200,182,0.14) 35%,
+    transparent 70%);
+  transition:transform .15s ease-out;
+}
+.hero-inner{position:relative;z-index:3;max-width:920px;width:100%;}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.38rem 1rem .38rem .45rem;
+  background:var(--white);border:1px solid var(--border);border-radius:var(--radius-pill);
+  margin-bottom:2.5rem;box-shadow:0 2px 16px rgba(0,0,0,.06);
+  opacity:0;transform:translateY(14px);animation:fadeUp .7s var(--ease) .2s forwards;
+}
+.pill-dot{
+  width:20px;height:20px;background:var(--black);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:.52rem;color:var(--white);
+}
+.pill-text{font-size:.7rem;font-weight:600;color:var(--mid);letter-spacing:.04em;}
+.pill-text b{color:var(--black);}
+.h1{
+  font-size:clamp(2.6rem,6.5vw,5.8rem);font-weight:800;line-height:.96;
+  letter-spacing:-.04em;margin-bottom:2rem;
+}
+.h1 .line{display:block;overflow:hidden;}
+.h1 .li{display:block;opacity:0;transform:translateY(110%);animation:slideUp .9s var(--ease) forwards;}
+.h1 .line:nth-child(1) .li{animation-delay:.35s;}
+.h1 .line:nth-child(2) .li{animation-delay:.5s;}
+.h1 .line:nth-child(3) .li{animation-delay:.65s;}
+.h1 .stroke{-webkit-text-stroke:3px var(--black);color:transparent;}
+.h1 .chip{
+  display:inline-block;background:var(--black);color:var(--white);
+  padding:.05em .25em;border-radius:.2em;
+}
+.hero-sub{
+  font-size:clamp(.85rem,1.3vw,.98rem);font-weight:300;color:var(--mid);
+  max-width:500px;line-height:1.78;margin:0 auto 3rem;
+  opacity:0;transform:translateY(16px);animation:fadeUp .8s var(--ease) .85s forwards;
+}
+.hero-sub b{color:var(--black);font-weight:600;}
+.hero-btns{
+  display:flex;gap:1rem;justify-content:center;align-items:center;flex-wrap:wrap;
+  opacity:0;transform:translateY(16px);animation:fadeUp .8s var(--ease) 1.05s forwards;
+}
+.btn-primary{
+  padding:1rem 2.4rem;background:var(--black);color:var(--white);
+  font-family:var(--font);font-size:.82rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;cursor:pointer;border:none;border-radius:var(--radius-pill);
+  transition:all .35s var(--ease);text-decoration:none;display:inline-flex;align-items:center;gap:.6rem;
+  box-shadow:0 8px 32px rgba(0,0,0,.18);
+}
+.btn-primary:hover{background:var(--black3);transform:translateY(-2px);box-shadow:0 16px 48px rgba(0,0,0,.25);}
+.btn-primary svg{transition:transform .3s;}
+.btn-primary:hover svg{transform:translateX(3px);}
+.btn-secondary{
+  padding:.95rem 2.2rem;background:var(--white);color:var(--black);
+  font-family:var(--font);font-size:.82rem;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;cursor:pointer;border:1.5px solid var(--border);
+  border-radius:var(--radius-pill);transition:all .35s;text-decoration:none;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+}
+.btn-secondary:hover{border-color:rgba(0,0,0,.25);transform:translateY(-2px);}
+.hero-note{
+  margin-top:1.75rem;font-size:.72rem;color:var(--muted);letter-spacing:.04em;
+  display:flex;justify-content:center;align-items:center;gap:.6rem;
+  opacity:0;animation:fadeUp .8s var(--ease) 1.25s forwards;
+}
+.hero-note .sep{color:var(--border);}
+
+/* FLOATING CARDS */
+.float-cards{
+  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+  margin-top:5rem;
+  opacity:0;transform:translateY(28px);animation:fadeUp 1s var(--ease) 1.5s forwards;
+}
+.float-card{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.2rem 1.6rem;display:flex;align-items:center;gap:.9rem;
+  box-shadow:0 4px 24px rgba(0,0,0,.07);transition:transform .4s var(--ease),box-shadow .4s;
+  animation:float 5s ease-in-out infinite;
+}
+.float-card:nth-child(2){animation-delay:1.6s;}
+.float-card:nth-child(3){animation-delay:3.2s;}
+.float-card:hover{transform:translateY(-6px)!important;box-shadow:0 14px 40px rgba(0,0,0,.12);}
+.fc-icon{
+  width:42px;height:42px;background:var(--black);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;
+}
+.fc-label{font-size:.76rem;font-weight:700;color:var(--black);margin-bottom:.12rem;}
+.fc-val{font-size:.7rem;color:var(--muted);font-weight:400;}
+
+/* MARQUEE */
+.marquee-wrap{
+  padding:1.4rem 0;border-top:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);overflow:hidden;background:var(--white);
+}
+.marquee-track{display:flex;gap:3rem;animation:marquee 22s linear infinite;white-space:nowrap;}
+.m-item{
+  font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);display:flex;align-items:center;gap:1rem;flex-shrink:0;
+}
+.m-dot{width:4px;height:4px;background:currentColor;border-radius:50%;}
+.m-item.hi{color:var(--black);}
+
+/* SECTION BASE */
+section{padding:8rem 7%;}
+.sec-label{
+  font-size:.63rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:1rem;display:inline-flex;align-items:center;gap:.65rem;
+}
+.sec-label .lline{width:22px;height:1.5px;background:var(--muted);border-radius:2px;display:inline-block;}
+.sec-title{font-size:clamp(1.7rem,3.5vw,3rem);font-weight:800;line-height:1.07;letter-spacing:-.03em;margin-bottom:1.2rem;}
+.sec-desc{font-size:.88rem;color:var(--mid);font-weight:300;line-height:1.8;max-width:500px;}
+
+/* REVEAL — more dramatic */
+.rv{opacity:0;transform:translateY(44px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
+.rv.on{opacity:1;transform:translateY(0);}
+.rv-l{opacity:0;transform:translateX(-40px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
+.rv-l.on{opacity:1;transform:translateX(0);}
+.rv-s{opacity:0;transform:scale(.9) translateY(20px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
+.rv-s.on{opacity:1;transform:scale(1) translateY(0);}
+
+/* TILT CARD — JS-driven */
+.tilt{transform-style:preserve-3d;transition:transform .08s linear,box-shadow .4s;}
+.tilt:hover{box-shadow:0 28px 70px rgba(0,0,0,.14)!important;}
+
+/* SHIMMER hover on white cards */
+@keyframes shimmer{0%{left:-100%;}100%{left:200%;}}
+.shimmer-host{overflow:hidden;}
+.shimmer-host::after{
+  content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.45) 50%,transparent 60%);
+  transition:none;pointer-events:none;
+}
+.shimmer-host:hover::after{animation:shimmer .65s var(--ease) forwards;}
+
+/* MAGNETIC BUTTON glow */
+.btn-primary,.btn-dark,.btn-cta{position:relative;overflow:hidden;}
+.btn-primary::after,.btn-dark::after,.btn-cta::after{
+  content:'';position:absolute;inset:-2px;border-radius:inherit;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.18),transparent 65%);
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.btn-primary:hover::after,.btn-dark:hover::after,.btn-cta:hover::after{opacity:1;}
+
+/* UNDERLINE SLIDE for nav links — already there, make it thicker */
+.nav-links a::after{height:2px;}
+
+/* STEP CARD number glow on hover */
+.step-n{transition:color .3s,letter-spacing .3s;}
+.step:hover .step-n{color:var(--black);letter-spacing:.28em;}
+
+/* FEATURE card shimmer */
+.feat-card{overflow:hidden;}
+.feat-card::after{
+  content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.05) 50%,transparent 60%);
+  pointer-events:none;
+}
+.feat-card:hover::after{animation:shimmer .6s var(--ease) forwards;}
+
+/* STAT card number pop */
+.stat-num{transition:transform .4s var(--bounce),color .3s;}
+.stat-card:hover .stat-num{transform:scale(1.06);}
+
+/* PRICE card featured glow pulse */
+@keyframes featGlow{0%,100%{box-shadow:0 24px 70px rgba(0,0,0,.22);}50%{box-shadow:0 30px 90px rgba(0,0,0,.32);}}
+.price-card.feat{animation:featGlow 3s ease-in-out infinite;}
+.price-card.feat:hover{animation:none;box-shadow:0 36px 100px rgba(0,0,0,.36)!important;transform:scale(1.06)!important;}
+
+/* TESTIMONIAL card subtle lift */
+.t-card{transition:background .4s,transform .4s var(--ease);}
+.t-card:not(.big):hover{transform:translateY(-4px);}
+
+/* SCROLL PROGRESS BAR */
+.progress-bar{
+  position:fixed;top:0;left:0;height:2px;width:0%;
+  background:var(--black);z-index:9999;transition:width .05s linear;
+}
+
+/* FAQ hover */
+.faq-q{transition:color .3s,padding-left .3s;}
+.faq-q:hover{padding-left:.4rem;}
+.faq-item.open .faq-q{padding-left:0;color:var(--black);}
+
+/* FLOAT CARD shimmer */
+.float-card{overflow:hidden;position:relative;}
+.float-card::after{
+  content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;
+  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.5) 50%,transparent 65%);
+  pointer-events:none;
+}
+.float-card:hover::after{animation:shimmer .5s var(--ease) forwards;}
+
+/* HERO PILL pulse */
+@keyframes pillPulse{0%,100%{box-shadow:0 2px 16px rgba(0,0,0,.06);}50%{box-shadow:0 4px 24px rgba(0,0,0,.12);}}
+.hero-pill{animation:fadeUp .7s var(--ease) .2s forwards,pillPulse 4s ease-in-out 2s infinite;}
+
+/* SECTION entrance stagger — children */
+.steps .step,.price-grid .price-card,.stats-grid .stat-card{
+  transition:opacity .8s var(--ease),transform .8s var(--ease),box-shadow .4s,border-color .4s;
+}
+
+/* HOW SECTION */
+.how-sec{background:var(--bg);position:relative;overflow:hidden;}
+.how-header{margin-bottom:4rem;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;position:relative;z-index:2;}
+.step{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:2.5rem 2rem;position:relative;overflow:hidden;
+  transition:transform .4s var(--ease),box-shadow .4s,border-color .4s;
+  box-shadow:0 2px 12px rgba(0,0,0,.04);
+}
+.step::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--black);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease);
+}
+.step:hover{transform:translateY(-7px);box-shadow:0 20px 56px rgba(0,0,0,.1);border-color:rgba(0,0,0,.14);}
+.step:hover::before{transform:scaleX(1);}
+.step-n{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;}
+.step-ico{
+  width:52px;height:52px;background:var(--black);border-radius:14px;
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem;
+  margin-bottom:1.5rem;transition:transform .4s var(--bounce);
+}
+.step:hover .step-ico{transform:scale(1.1) rotate(-4deg);}
+.step-t{font-size:1.05rem;font-weight:700;margin-bottom:.6rem;letter-spacing:-.01em;}
+.step-d{font-size:.84rem;color:var(--mid);line-height:1.72;font-weight:300;}
+
+/* FEATURES */
+.feat-sec{background:var(--black);color:var(--white);position:relative;overflow:hidden;}
+.feat-sec .sec-label{color:rgba(255,255,255,.3);}
+.feat-sec .sec-label .lline{background:rgba(255,255,255,.2);}
+.feat-sec .sec-title{color:var(--white);}
+.feat-sec .sec-desc{color:rgba(255,255,255,.4);}
+.feat-grid-wrap{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;position:relative;z-index:2;}
+.feat-sticky{position:sticky;top:9rem;}
+.feat-quote{
+  margin-top:2.5rem;padding:1.5rem 1.5rem 1.5rem 1.25rem;
+  border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);
+  background:rgba(255,255,255,.03);position:relative;overflow:hidden;
+}
+.feat-quote::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:rgba(255,255,255,.25);border-radius:0 2px 2px 0;
+}
+.feat-quote p{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.72;font-weight:300;font-style:italic;}
+.feat-quote strong{color:rgba(255,255,255,.85);font-style:normal;font-weight:600;}
+.feat-cards{display:flex;flex-direction:column;gap:2px;}
+.feat-card{
+  padding:1.75rem 2rem;background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.06);transition:all .4s;cursor:default;position:relative;overflow:hidden;
+}
+.feat-cards .feat-card:first-child{border-radius:var(--radius) var(--radius) 0 0;}
+.feat-cards .feat-card:last-child{border-radius:0 0 var(--radius) var(--radius);}
+.feat-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--white);transform:scaleY(0);transform-origin:bottom;transition:transform .4s var(--ease);
+}
+.feat-card:hover{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.14);}
+.feat-card:hover::before{transform:scaleY(1);}
+.feat-top{display:flex;align-items:center;gap:.9rem;margin-bottom:.55rem;}
+.feat-ico{
+  width:36px;height:36px;background:rgba(255,255,255,.08);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;transition:background .3s;
+}
+.feat-card:hover .feat-ico{background:rgba(255,255,255,.16);}
+.feat-name{font-size:.94rem;font-weight:700;color:var(--white);letter-spacing:-.01em;}
+.feat-text{font-size:.81rem;color:rgba(255,255,255,.4);line-height:1.72;font-weight:300;padding-left:calc(36px + .9rem);}
+
+/* STATS */
+.stats-sec{background:var(--bg2);position:relative;overflow:hidden;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:4rem;position:relative;z-index:2;}
+.stat-card{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:2.5rem 2rem;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.04);
+  transition:transform .4s var(--ease),box-shadow .4s;
+}
+.stat-card:hover{transform:translateY(-6px);box-shadow:0 18px 50px rgba(0,0,0,.1);}
+.stat-num{font-size:clamp(2.2rem,4vw,3.5rem);font-weight:900;letter-spacing:-.04em;line-height:1;margin-bottom:.4rem;}
+.stat-lbl{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+
+/* PRICING */
+.price-sec{background:var(--bg);position:relative;overflow:hidden;}
+.price-header{text-align:center;margin-bottom:4.5rem;position:relative;z-index:2;}
+.price-header .sec-label{justify-content:center;}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1060px;margin:0 auto;position:relative;z-index:2;}
+.price-card{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:2.5rem 2rem;position:relative;box-shadow:0 2px 12px rgba(0,0,0,.04);
+  transition:transform .4s var(--ease),box-shadow .4s,border-color .4s;
+}
+.price-card.feat{
+  background:var(--black);color:var(--white);border-color:var(--black);
+  box-shadow:0 24px 70px rgba(0,0,0,.22);transform:scale(1.04);
+}
+.price-card:not(.feat):hover{transform:translateY(-6px);box-shadow:0 18px 50px rgba(0,0,0,.1);}
+.p-badge{
+  position:absolute;top:1.25rem;right:1.25rem;
+  font-size:.57rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  background:var(--white);color:var(--black);padding:.28rem .75rem;border-radius:var(--radius-pill);
+}
+.p-tier{font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem;}
+.price-card.feat .p-tier{color:rgba(255,255,255,.3);}
+.p-amt{font-size:3.2rem;font-weight:900;letter-spacing:-.04em;line-height:1;margin-bottom:.18rem;}
+.p-unit{font-size:.78rem;color:var(--muted);margin-bottom:1.5rem;font-weight:300;}
+.price-card.feat .p-unit{color:rgba(255,255,255,.35);}
+.p-div{width:100%;height:1px;background:var(--border2);margin-bottom:1.5rem;}
+.price-card.feat .p-div{background:rgba(255,255,255,.08);}
+.p-feats{list-style:none;display:flex;flex-direction:column;gap:.75rem;margin-bottom:2.5rem;}
+.p-feat{font-size:.82rem;color:var(--mid);display:flex;align-items:center;gap:.65rem;font-weight:300;}
+.p-feat::before{
+  content:'✓';font-size:.6rem;font-weight:900;
+  width:20px;height:20px;border:1.5px solid rgba(0,0,0,.12);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.price-card.feat .p-feat{color:rgba(255,255,255,.58);}
+.price-card.feat .p-feat::before{border-color:rgba(255,255,255,.18);color:var(--white);}
+.btn-p{
+  width:100%;padding:.9rem;font-family:var(--font);font-size:.74rem;
+  font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--radius-pill);transition:all .3s;
+}
+.btn-p-out{background:transparent;border:1.5px solid var(--border);color:var(--black);}
+.btn-p-out:hover{border-color:var(--black);background:rgba(0,0,0,.04);}
+.btn-p-fill{background:var(--white);border:1.5px solid var(--white);color:var(--black);}
+.btn-p-fill:hover{background:var(--bg);}
+
+/* TESTIMONIALS */
+.t-sec{background:var(--black);color:var(--white);position:relative;overflow:hidden;}
+.t-sec .sec-label{color:rgba(255,255,255,.28);}
+.t-sec .sec-label .lline{background:rgba(255,255,255,.18);}
+.t-sec .sec-title{color:var(--white);}
+.t-header{text-align:center;margin-bottom:4.5rem;position:relative;z-index:2;}
+.t-header .sec-label{justify-content:center;}
+.t-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5px;background:rgba(255,255,255,.06);
+  border-radius:var(--radius);overflow:hidden;position:relative;z-index:2;
+}
+.t-card{background:var(--black2);padding:2.25rem;transition:background .4s;}
+.t-card:hover{background:#1a1a1a;}
+.t-card.big{grid-column:span 2;background:rgba(255,255,255,.04);}
+.t-stars{font-size:.88rem;margin-bottom:1.25rem;letter-spacing:.05rem;}
+.t-quote{font-size:.87rem;line-height:1.78;color:rgba(255,255,255,.55);font-weight:300;margin-bottom:2rem;}
+.t-card.big .t-quote{font-size:1.06rem;color:rgba(255,255,255,.78);}
+.t-author{display:flex;align-items:center;gap:.85rem;}
+.t-avatar{
+  width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:800;color:var(--white);flex-shrink:0;
+}
+.t-name{font-size:.82rem;font-weight:700;color:var(--white);margin-bottom:.1rem;}
+.t-biz{font-size:.69rem;color:rgba(255,255,255,.28);}
+
+/* FAQ */
+.faq-sec{background:var(--bg2);position:relative;overflow:hidden;}
+.faq-inner{display:grid;grid-template-columns:1fr 1.5fr;gap:6rem;align-items:start;position:relative;z-index:2;}
+.faq-stick{position:sticky;top:9rem;}
+.faq-box{
+  margin-top:2rem;padding:1.5rem;
+  background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  font-size:.81rem;color:var(--mid);line-height:1.65;
+}
+.faq-box strong{color:var(--black);display:block;margin-bottom:.35rem;font-size:.87rem;}
+.faq-list{display:flex;flex-direction:column;}
+.faq-item{border-bottom:1px solid var(--border2);}
+.faq-q{
+  width:100%;background:transparent;border:none;color:var(--black);font-family:var(--font);
+  font-size:.9rem;font-weight:500;text-align:left;padding:1.5rem 0;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;gap:2rem;
+  transition:color .3s;letter-spacing:-.01em;
+}
+.faq-q:hover{color:var(--mid);}
+.faq-tog{
+  width:30px;height:30px;border:1.5px solid var(--border);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-size:.85rem;transition:all .4s var(--ease);color:var(--black);
+}
+.faq-item.open .faq-tog{background:var(--black);color:var(--white);border-color:var(--black);transform:rotate(45deg);}
+.faq-a{
+  font-size:.84rem;color:var(--mid);line-height:1.8;font-weight:300;
+  max-height:0;overflow:hidden;transition:max-height .5s var(--ease),padding .3s;
+}
+.faq-item.open .faq-a{max-height:260px;padding-bottom:1.5rem;}
+
+/* CTA */
+.cta-sec{
+  background:var(--black);color:var(--white);text-align:center;
+  padding:10rem 7%;position:relative;overflow:hidden;
+}
+.cta-glow{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:700px;height:400px;pointer-events:none;
+  background:radial-gradient(ellipse,rgba(255,255,255,.05) 0%,transparent 70%);
+}
+.cta-inner{position:relative;z-index:2;}
+.cta-chip{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.35rem 1rem;margin-bottom:2rem;
+  border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-pill);
+  font-size:.63rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.38);
+}
+.cta-chip-dot{width:6px;height:6px;background:rgba(255,255,255,.4);border-radius:50%;animation:pulse 2s ease-in-out infinite;}
+.cta-t{
+  font-size:clamp(2.4rem,5.5vw,5rem);font-weight:900;letter-spacing:-.045em;line-height:.94;margin-bottom:2rem;
+}
+.cta-t .stroke{-webkit-text-stroke:2px rgba(255,255,255,.28);color:transparent;}
+.cta-sub{font-size:.96rem;color:rgba(255,255,255,.38);font-weight:300;margin-bottom:3rem;line-height:1.72;}
+.btn-cta{
+  padding:1.1rem 3rem;background:var(--white);color:var(--black);
+  font-family:var(--font);font-size:.84rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;border:none;border-radius:var(--radius-pill);transition:all .35s var(--ease);
+  text-decoration:none;display:inline-block;box-shadow:0 8px 40px rgba(255,255,255,.14);
+}
+.btn-cta:hover{background:var(--bg);transform:translateY(-3px);box-shadow:0 18px 60px rgba(255,255,255,.2);}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border2);padding:4rem 7%;}
+.foot-inner{display:grid;grid-template-columns:1.8fr 1fr 1fr;gap:4rem;margin-bottom:3.5rem;}
+.foot-logo{display:flex;align-items:center;gap:.55rem;margin-bottom:.9rem;}
+.foot-star{
+  width:26px;height:26px;background:var(--black);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;color:var(--white);font-size:.6rem;
+}
+.foot-wordmark{font-size:.9rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;}
+.foot-tag{font-size:.79rem;color:var(--muted);font-weight:300;line-height:1.65;max-width:250px;}
+.foot-col-t{font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:1.1rem;}
+.foot-links{list-style:none;display:flex;flex-direction:column;gap:.55rem;}
+.foot-links a{font-size:.81rem;color:var(--mid);text-decoration:none;font-weight:300;transition:color .3s;}
+.foot-links a:hover{color:var(--black);}
+.foot-bottom{border-top:1px solid var(--border2);padding-top:1.8rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.foot-copy{font-size:.7rem;color:var(--muted);font-weight:300;}
+.foot-partner{font-size:.68rem;color:var(--muted);display:flex;align-items:center;gap:.4rem;}
+
+/* MODAL */
+.modal-ov{
+  position:fixed;inset:0;background:rgba(10,10,10,.55);
+  backdrop-filter:blur(14px);z-index:9000;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .4s;
+}
+.modal-ov.open{opacity:1;pointer-events:all;}
+.modal-box{
+  background:var(--white);border:1px solid var(--border);border-radius:calc(var(--radius)*1.3);
+  padding:2.75rem;max-width:510px;width:92%;position:relative;
+  transform:scale(.92) translateY(28px);transition:transform .45s var(--bounce);
+  box-shadow:0 30px 100px rgba(0,0,0,.18);
+}
+.modal-ov.open .modal-box{transform:scale(1) translateY(0);}
+.m-close{
+  position:absolute;top:1.2rem;right:1.2rem;
+  width:32px;height:32px;background:var(--bg2);border:1px solid var(--border);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:.82rem;cursor:pointer;transition:all .3s;color:var(--mid);
+}
+.m-close:hover{background:var(--border);color:var(--black);}
+.m-title{font-size:1.55rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.4rem;}
+.m-sub{font-size:.81rem;color:var(--mid);font-weight:300;margin-bottom:2rem;line-height:1.6;}
+.f-field{margin-bottom:.75rem;}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem;}
+.f-input{
+  width:100%;background:var(--bg);border:1.5px solid var(--border2);color:var(--black);
+  font-family:var(--font);font-size:.84rem;padding:.82rem 1rem;
+  border-radius:var(--radius-sm);transition:border-color .3s,background .3s;outline:none;
+}
+.f-input::placeholder{color:var(--muted);}
+.f-input:focus{border-color:rgba(0,0,0,.28);background:var(--white);}
+.f-submit{
+  width:100%;padding:.95rem;background:var(--black);color:var(--white);
+  font-family:var(--font);font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;border:none;border-radius:var(--radius-pill);transition:all .3s;margin-top:.4rem;
+}
+.f-submit:hover{background:var(--black3);}
+
+/* KEYFRAMES */
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+@keyframes slideUp{to{opacity:1;transform:translateY(0);}}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+@keyframes pulse{0%,100%{opacity:.5;}50%{opacity:1;}}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav-links{display:none;}
+  .steps,.price-grid,.stats-grid,.t-grid,.foot-inner{grid-template-columns:1fr;}
+  .feat-grid-wrap,.faq-inner{grid-template-columns:1fr;}
+  .feat-sticky,.faq-stick{position:relative;top:unset;}
+  .t-card.big{grid-column:span 1;}
+  .price-card.feat{transform:none;}
+  section{padding:5rem 5%;}
+  .h1{font-size:clamp(2.6rem,11vw,4rem);}
+  .hero{padding:6rem 5% 3.5rem;}
+  .f-row{grid-template-columns:1fr;}
+  nav{padding:0 5%;}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <span class="nav-star-box">★</span>-C-R-U-D-
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <div class="nav-ctas">
+    <a href="#" class="btn-ghost">Login</a>
+    <a href="#" class="btn-dark" id="enrollBtn">Enroll Free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="grid-bg"></div>
+  <div class="grid-fade"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-halo"></div>
+  <div class="hero-inner">
+    <div class="hero-pill">
+      <span class="pill-dot">★</span>
+      <span class="pill-text">Proud Partner of <b>Google</b> &nbsp;·&nbsp; #EffortlessReviews</span>
+    </div>
+    <h1 class="h1">
+      <span class="line"><span class="li">Customers</span></span>
+      <span class="line"><span class="li">Are <span class="stroke">Lazy.</span></span></span>
+      <span class="line"><span class="li"><span class="chip">We're&nbsp;Not.</span></span></span>
+    </h1>
+    <p class="hero-sub">Now your customers <b>never have to write a word.</b> One tap, a star rating, and we craft an emotionally resonant Google review — automatically.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-primary" id="heroEnrollBtn">
+        Boost Your Reviews
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#how" class="btn-secondary">See How It Works</a>
+    </div>
+    <p class="hero-note"><span>No upfront payment</span><span class="sep">|</span><span>Pay per review only</span><span class="sep">|</span><span>Setup in minutes</span></p>
+    <div class="float-cards">
+      <div class="float-card">
+        <div class="fc-icon">📱</div>
+        <div><p class="fc-label">1 Tap to Review</p><p class="fc-val">No typing required</p></div>
+      </div>
+      <div class="float-card">
+        <div class="fc-icon">⭐</div>
+        <div><p class="fc-label">+4.8 Avg Rating</p><p class="fc-val">Across all businesses</p></div>
+      </div>
+      <div class="float-card">
+        <div class="fc-icon">💸</div>
+        <div><p class="fc-label">Zero Upfront</p><p class="fc-val">Pay per review only</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="m-item hi"><span>Effortless Reviews</span><span class="m-dot"></span></span>
+    <span class="m-item"><span>Zero Upfront Cost</span><span class="m-dot"></span></span>
+    <span class="m-item hi"><span>Google Partner</span><span class="m-dot"></span></span>
+    <span class="m-item"><span>Pay Per Review</span><span class="m-dot"></span></span>
+    <span class="m-item hi"><span>Emotionally Resonant</span><span class="m-dot"></span></span>
+    <span class="m-item"><span>No Forms. No Friction.</span><span class="m-dot"></span></span>
+    <span class="m-item hi"><span>Built for Businesses</span><span class="m-dot"></span></span>
+    <span class="m-item"><span>#VoiceAgainstFake</span><span class="m-dot"></span></span>
+    <span class="m-item hi"><span>Effortless Reviews</span><span class="m-dot"></span></span>
+    <span class="m-item"><span>Zero Upfront Cost</span><span class="m-dot"></span></span>
+    <span class="m-item hi"><span>Google Partner</span><span class="m-dot"></span></span>
+    <span class="m-item"><span>Pay Per Review</span><span class="m-dot"></span></span>
+    <span class="m-item hi"><span>Emotionally Resonant</span><span class="m-dot"></span></span>
+    <span class="m-item"><span>No Forms. No Friction.</span><span class="m-dot"></span></span>
+    <span class="m-item hi"><span>Built for Businesses</span><span class="m-dot"></span></span>
+    <span class="m-item"><span>#VoiceAgainstFake</span><span class="m-dot"></span></span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how-sec" id="how">
+  <div class="grid-bg"></div>
+  <div style="position:relative;z-index:2;">
+    <div class="how-header rv">
+      <p class="sec-label"><span class="lline"></span>The Process</p>
+      <h2 class="sec-title">Three steps.<br>Zero effort.</h2>
+      <p class="sec-desc">Your customer scans, taps once, and we handle everything. That's the entire experience on their end.</p>
+    </div>
+    <div class="steps">
+      <div class="step rv shimmer-host" style="transition-delay:.1s">
+        <p class="step-n">Step 01</p>
+        <div class="step-ico">📱</div>
+        <h3 class="step-t">Customer Scans Your QR</h3>
+        <p class="step-d">Place your unique CRUD QR code at your counter. Happy customers scan it — no app, no account, no friction needed.</p>
+      </div>
+      <div class="step rv shimmer-host" style="transition-delay:.2s">
+        <p class="step-n">Step 02</p>
+        <div class="step-ico">⚡</div>
+        <h3 class="step-t">We Write the Review</h3>
+        <p class="step-d">Based on their star tap, our system crafts a hyper-personal, authentic-sounding Google review. Instantly. Every time.</p>
+      </div>
+      <div class="step rv shimmer-host" style="transition-delay:.3s">
+        <p class="step-n">Step 03</p>
+        <div class="step-ico">🌟</div>
+        <h3 class="step-t">Your Google Listing Grows</h3>
+        <p class="step-d">The review goes live on your profile. Your rating climbs. You pay only when a review is successfully delivered.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="feat-sec" id="features">
+  <div class="grid-bg grid-dark"></div>
+  <div class="grid-fade grid-dark-fade"></div>
+  <div class="feat-grid-wrap">
+    <div class="feat-sticky">
+      <p class="sec-label rv-l"><span class="lline"></span>What We Offer</p>
+      <h2 class="sec-title rv-l" style="transition-delay:.1s">Built different.<br>Designed to win.</h2>
+      <p class="sec-desc rv-l" style="transition-delay:.2s">Every feature is built around one goal: real Google reviews without making your customers do any work.</p>
+      <div class="feat-quote rv-l" style="transition-delay:.32s">
+        <p><strong>"Believe it or not — your customers never have to write a single word."</strong><br>That's not a gimmick. That's the entire product.</p>
+      </div>
+    </div>
+    <div class="feat-cards">
+      <div class="feat-card rv" style="transition-delay:.08s">
+        <div class="feat-top"><div class="feat-ico">✍️</div><span class="feat-name">AI-Written, Human-Sounding</span></div>
+        <p class="feat-text">Every review is unique, personal, calibrated to star rating and business type. Nothing sounds like a template.</p>
+      </div>
+      <div class="feat-card rv" style="transition-delay:.14s">
+        <div class="feat-top"><div class="feat-ico">💸</div><span class="feat-name">Zero Upfront Cost</span></div>
+        <p class="feat-text">No subscription. No setup fee. You pay only when a review successfully posts to your Google Business Profile.</p>
+      </div>
+      <div class="feat-card rv" style="transition-delay:.2s">
+        <div class="feat-top"><div class="feat-ico">⚙️</div><span class="feat-name">No Tech Team Needed</span></div>
+        <p class="feat-text">Enroll, get your QR code, place it. Done. No software, no configurations, no ongoing maintenance required.</p>
+      </div>
+      <div class="feat-card rv" style="transition-delay:.26s">
+        <div class="feat-top"><div class="feat-ico">📊</div><span class="feat-name">Dashboard & Real-Time Insights</span></div>
+        <p class="feat-text">Track reviews, monitor your rating trend, understand what's driving your best feedback — all in one dashboard.</p>
+      </div>
+      <div class="feat-card rv" style="transition-delay:.32s">
+        <div class="feat-top"><div class="feat-ico">🛡️</div><span class="feat-name">#VoiceAgainstFake</span></div>
+        <p class="feat-text">Real customers. Real star ratings. We only write the words. No fake reviews, no manufactured experiences. Ever.</p>
+      </div>
+      <div class="feat-card rv" style="transition-delay:.38s">
+        <div class="feat-top"><div class="feat-ico">🤝</div><span class="feat-name">Proud Google Partner</span></div>
+        <p class="feat-text">Operating within Google's ecosystem as a verified partner. Reviews are indexed with full credibility and authority.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-sec">
+  <div class="grid-bg"></div>
+  <div style="position:relative;z-index:2;">
+    <p class="sec-label rv"><span class="lline"></span>By The Numbers</p>
+    <h2 class="sec-title rv" style="transition-delay:.1s">Numbers<br>don't lie.</h2>
+    <div class="stats-grid">
+      <div class="stat-card rv-s" style="transition-delay:.1s"><div class="stat-num" data-target="10000">0</div><p class="stat-lbl">Reviews Generated</p></div>
+      <div class="stat-card rv-s" style="transition-delay:.2s"><div class="stat-num" data-target="500">0</div><p class="stat-lbl">Businesses Enrolled</p></div>
+      <div class="stat-card rv-s" style="transition-delay:.3s"><div class="stat-num" data-target="98">0</div><p class="stat-lbl">% Satisfaction Rate</p></div>
+      <div class="stat-card rv-s" style="transition-delay:.4s"><div class="stat-num" data-target="4.8">0</div><p class="stat-lbl">Avg Rating Boost</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="price-sec" id="pricing">
+  <div class="grid-bg"></div>
+  <div class="price-header rv">
+    <p class="sec-label">Transparent Pricing</p>
+    <h2 class="sec-title">Simple. Honest.<br>Pay per result.</h2>
+    <p class="sec-desc" style="margin:0 auto;">No subscriptions. No hidden fees. You only pay when results land on your Google profile.</p>
+  </div>
+  <div class="price-grid">
+    <div class="price-card rv" style="transition-delay:.1s">
+      <p class="p-tier">Starter</p>
+      <div class="p-amt">₹49</div>
+      <p class="p-unit">per review generated</p>
+      <div class="p-div"></div>
+      <ul class="p-feats">
+        <li class="p-feat">QR Code Setup</li>
+        <li class="p-feat">AI Review Writing</li>
+        <li class="p-feat">Google Integration</li>
+        <li class="p-feat">Basic Dashboard</li>
+        <li class="p-feat">Email Support</li>
+      </ul>
+      <button class="btn-p btn-p-out" onclick="openModal()">Get Started</button>
+    </div>
+    <div class="price-card feat rv" style="transition-delay:.2s">
+      <span class="p-badge">Most Popular</span>
+      <p class="p-tier">Growth</p>
+      <div class="p-amt">₹39</div>
+      <p class="p-unit">per review · min 100/mo</p>
+      <div class="p-div"></div>
+      <ul class="p-feats">
+        <li class="p-feat">Everything in Starter</li>
+        <li class="p-feat">Priority Generation</li>
+        <li class="p-feat">Advanced Analytics</li>
+        <li class="p-feat">Multi-location Support</li>
+        <li class="p-feat">Dedicated Account Manager</li>
+      </ul>
+      <button class="btn-p btn-p-fill" onclick="openModal()">Get Started</button>
+    </div>
+    <div class="price-card rv" style="transition-delay:.3s">
+      <p class="p-tier">Enterprise</p>
+      <div class="p-amt">Custom</div>
+      <p class="p-unit">tailored to your volume</p>
+      <div class="p-div"></div>
+      <ul class="p-feats">
+        <li class="p-feat">Everything in Growth</li>
+        <li class="p-feat">Bulk Volume Discounts</li>
+        <li class="p-feat">White-label Options</li>
+        <li class="p-feat">API Access</li>
+        <li class="p-feat">SLA & Priority Support</li>
+      </ul>
+      <button class="btn-p btn-p-out" onclick="openModal()">Contact Us</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="t-sec" id="testimonials">
+  <div class="grid-bg grid-dark"></div>
+  <div class="grid-fade grid-dark-fade"></div>
+  <div class="t-header rv">
+    <p class="sec-label">What They're Saying</p>
+    <h2 class="sec-title">Real businesses.<br>Real results.</h2>
+  </div>
+  <div class="t-grid">
+    <div class="t-card big rv">
+      <div class="t-stars">⭐⭐⭐⭐⭐</div>
+      <p class="t-quote">"We went from 23 reviews to over 200 in six weeks. Our local Google ranking shot up and we've seen a measurable increase in foot traffic. CRUD didn't just give us reviews — it gave us credibility we couldn't buy any other way."</p>
+      <div class="t-author"><div class="t-avatar">RK</div><div><p class="t-name">Rajesh Kumar</p><p class="t-biz">Spice Garden Restaurant · Bangalore</p></div></div>
+    </div>
+    <div class="t-card rv" style="transition-delay:.15s">
+      <div class="t-stars">⭐⭐⭐⭐⭐</div>
+      <p class="t-quote">"My customers are happy but never write reviews. CRUD fixed that completely. Setup took 10 minutes."</p>
+      <div class="t-author"><div class="t-avatar">PJ</div><div><p class="t-name">Priya Joshi</p><p class="t-biz">Bloom Salon · Pune</p></div></div>
+    </div>
+    <div class="t-card rv" style="transition-delay:.1s">
+      <div class="t-stars">⭐⭐⭐⭐⭐</div>
+      <p class="t-quote">"Pay per review means zero risk. The ROI became obvious within the first month of using CRUD."</p>
+      <div class="t-author"><div class="t-avatar">AS</div><div><p class="t-name">Arjun Shah</p><p class="t-biz">ShahFit Gym · Mumbai</p></div></div>
+    </div>
+    <div class="t-card rv" style="transition-delay:.2s">
+      <div class="t-stars">⭐⭐⭐⭐⭐</div>
+      <p class="t-quote">"The reviews don't sound robotic at all. They sound exactly like something my actual customers would write."</p>
+      <div class="t-author"><div class="t-avatar">NM</div><div><p class="t-name">Nisha Menon</p><p class="t-biz">Craft & Brew Café · Kochi</p></div></div>
+    </div>
+    <div class="t-card rv" style="transition-delay:.25s">
+      <div class="t-stars">⭐⭐⭐⭐⭐</div>
+      <p class="t-quote">"Three locations, zero hassle. CRUD scales perfectly and the support team is genuinely great."</p>
+      <div class="t-author"><div class="t-avatar">VR</div><div><p class="t-name">Vivek Rao</p><p class="t-biz">AutoCare Plus · Chennai</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-sec" id="faq">
+  <div class="grid-bg"></div>
+  <div class="faq-inner">
+    <div class="faq-stick">
+      <p class="sec-label rv-l"><span class="lline"></span>FAQs</p>
+      <h2 class="sec-title rv-l" style="transition-delay:.1s">Got<br>questions?</h2>
+      <p class="sec-desc rv-l" style="transition-delay:.2s">We've answered the most common ones below. Something still unclear? Reach out — we respond fast.</p>
+      <div class="faq-box rv-l" style="transition-delay:.3s"><strong>Still unsure?</strong>Talk to our team. We'll walk you through the setup and show you results from businesses like yours.</div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-q">Are the reviews authentic?<span class="faq-tog">+</span></button><div class="faq-a">Absolutely. CRUD only generates reviews when a real customer has scanned your QR and provided a real star rating. We write the words — the experience and rating are entirely genuine. We're passionate about #VoiceAgainstFake. Zero fake reviews, ever.</div></div>
+      <div class="faq-item"><button class="faq-q">How does pay-per-review work?<span class="faq-tog">+</span></button><div class="faq-a">Nothing to pay upfront. No monthly subscription. You're charged only when a review is successfully generated and posted to your Google Business Profile. We earn when you win — fully aligned incentives.</div></div>
+      <div class="faq-item"><button class="faq-q">How long does setup take?<span class="faq-tog">+</span></button><div class="faq-a">Most businesses are live within 24 hours. Fill in your details, receive your unique QR code, place it at your business — you're done. No tech team, no developers, no headaches.</div></div>
+      <div class="faq-item"><button class="faq-q">Will Google accept these reviews?<span class="faq-tog">+</span></button><div class="faq-a">Yes. CRUD is a Proud Partner of Google and operates fully within their guidelines. Reviews are posted through verified customer accounts and are treated as fully legitimate on the platform.</div></div>
+      <div class="faq-item"><button class="faq-q">Can I use CRUD for multiple locations?<span class="faq-tog">+</span></button><div class="faq-a">Absolutely. Growth and Enterprise plans are built for multi-location businesses. Each location gets its own QR code and you track performance across all locations from one dashboard.</div></div>
+      <div class="faq-item"><button class="faq-q">What if a review doesn't go through?<span class="faq-tog">+</span></button><div class="faq-a">You're never charged for reviews that don't successfully post. Pay-per-review means you only pay for results you can verify on your Google profile. No result, no charge.</div></div>
+      <div class="faq-item"><button class="faq-q">How are reviews personalized?<span class="faq-tog">+</span></button><div class="faq-a">Each review is generated based on the customer's star rating, your business type, and the specific context of the visit. The result is unique every time — never a copy-paste template.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="grid-bg grid-dark"></div>
+  <div class="cta-glow"></div>
+  <div class="cta-inner rv">
+    <div class="cta-chip"><span class="cta-chip-dot"></span>Ready to grow</div>
+    <h2 class="cta-t">More reviews.<br><span class="stroke">Zero</span> effort.</h2>
+    <p class="cta-sub">Join 500+ businesses already growing their Google presence<br>with -C-R-U-D-. No upfront cost. Cancel anytime.</p>
+    <a href="#" class="btn-cta" id="ctaEnrollBtn">Enroll Your Business →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div>
+      <div class="foot-logo"><div class="foot-star">★</div><span class="foot-wordmark">-C-R-U-D-</span></div>
+      <p class="foot-tag">#EffortlessReviews — We write reviews so your customers don't have to. Grow your Google reputation effortlessly.</p>
+    </div>
+    <div>
+      <p class="foot-col-t">Navigate</p>
+      <ul class="foot-links">
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="foot-col-t">Company</p>
+      <ul class="foot-links">
+        <li><a href="#">About CRUD</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">#VoiceAgainstFake</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <p class="foot-copy">© 2025 -C-R-U-D- #EffortlessReviews. All rights reserved.</p>
+    <div class="foot-partner">★ Proud Partner of Google ★★★★★</div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-ov" id="modal" onclick="handleOvClick(event)">
+  <div class="modal-box">
+    <button class="m-close" onclick="closeModal()">✕</button>
+    <h2 class="m-title">Join -C-R-U-D-</h2>
+    <p class="m-sub">Let's show you how effortless reviews can transform your Google presence. We'll reach out within 24hrs.</p>
+    <div class="f-row">
+      <div><input type="text" class="f-input" placeholder="Business Name"/></div>
+      <div><input type="text" class="f-input" placeholder="Location"/></div>
+    </div>
+    <div class="f-field"><input type="text" class="f-input" placeholder="Google Business Link"/></div>
+    <div class="f-row">
+      <div><input type="text" class="f-input" placeholder="Contact Person"/></div>
+      <div><input type="tel" class="f-input" placeholder="Phone Number"/></div>
+    </div>
+    <div class="f-field"><input type="email" class="f-input" placeholder="Email (Optional)"/></div>
+    <button class="f-submit" onclick="handleSubmit()">Submit Enrollment →</button>
+  </div>
+</div>
+
+<script>
+// SCROLL PROGRESS BAR
+const progressBar=document.getElementById('progressBar');
+window.addEventListener('scroll',()=>{
+  const doc=document.documentElement;
+  const pct=(doc.scrollTop||document.body.scrollTop)/(doc.scrollHeight-doc.clientHeight)*100;
+  progressBar.style.width=pct+'%';
+},{passive:true});
+
+// NAVBAR
+const nav=document.getElementById('navbar');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>20),{passive:true});
+
+// SCROLL REVEAL
+const rvEls=document.querySelectorAll('.rv,.rv-l,.rv-s');
+const ro=new IntersectionObserver(e=>e.forEach(en=>{
+  if(en.isIntersecting){en.target.classList.add('on');ro.unobserve(en.target);}
+}),{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+rvEls.forEach(el=>ro.observe(el));
+
+// COUNT UP
+const statEls=document.querySelectorAll('.stat-num[data-target]');
+const co=new IntersectionObserver(e=>e.forEach(en=>{
+  if(!en.isIntersecting)return;
+  const t=parseFloat(en.target.dataset.target),dec=t%1!==0,dur=1900,st=performance.now();
+  const tick=now=>{
+    const p=Math.min((now-st)/dur,1),ease=1-Math.pow(1-p,3),v=ease*t;
+    en.target.textContent=dec?v.toFixed(1):Math.floor(v).toLocaleString();
+    if(p<1)requestAnimationFrame(tick);
+    else en.target.textContent=dec?t.toFixed(1):t.toLocaleString()+'+';
+  };
+  requestAnimationFrame(tick);co.unobserve(en.target);
+}),{threshold:0.5});
+statEls.forEach(el=>co.observe(el));
+
+// FAQ
+document.querySelectorAll('.faq-q').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item=btn.parentElement,isOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!isOpen)item.classList.add('open');
+  });
+});
+
+// MODAL
+function openModal(){document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
+function handleOvClick(e){if(e.target===document.getElementById('modal'))closeModal();}
+function handleSubmit(){
+  const ins=document.querySelectorAll('.f-input');let ok=true;
+  ins.forEach((inp,i)=>{
+    if(i<5&&!inp.value.trim()){inp.style.borderColor='rgba(200,50,50,.55)';ok=false;}
+    else inp.style.borderColor='';
+  });
+  if(ok){
+    const b=document.querySelector('.f-submit');
+    b.textContent='✓ Submitted! We\'ll reach out soon.';b.style.background='#333';
+    setTimeout(()=>{closeModal();b.textContent='Submit Enrollment →';b.style.background='';},2500);
+  }
+}
+document.querySelectorAll('#enrollBtn,#heroEnrollBtn,#ctaEnrollBtn').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();openModal();}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// SMOOTH SCROLL
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=a.getAttribute('href');if(t==='#')return;
+    const el=document.querySelector(t);if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'});}
+  });
+});
+
+// PARALLAX GRID — hero
+const hGrid=document.querySelector('.hero .grid-bg');
+const hGlow=document.querySelector('.hero-glow');
+const hHalo=document.querySelector('.hero-halo');
+window.addEventListener('scroll',()=>{
+  const s=window.scrollY;
+  if(hGrid)hGrid.style.transform=`translateY(${s*.14}px)`;
+  if(hGlow)hGlow.style.transform=`translateX(-50%) translateY(${s*.08}px)`;
+  if(hHalo)hHalo.style.transform=`translate(-50%,-52%) translateY(${s*.06}px)`;
+},{passive:true});
+
+// TILT EFFECT on cards
+function addTilt(selector){
+  document.querySelectorAll(selector).forEach(card=>{
+    card.classList.add('tilt');
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5;
+      const y=(e.clientY-r.top)/r.height-.5;
+      card.style.transform=`perspective(800px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateY(-6px)`;
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transform='perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0)';
+    });
+  });
+}
+addTilt('.step');
+addTilt('.float-card');
+addTilt('.stat-card');
+
+// MAGNETIC BUTTON — cursor follow glow
+document.querySelectorAll('.btn-primary,.btn-dark,.btn-cta,.btn-nav-solid').forEach(btn=>{
+  btn.addEventListener('mousemove',e=>{
+    const r=btn.getBoundingClientRect();
+    const x=((e.clientX-r.left)/r.width*100).toFixed(1);
+    const y=((e.clientY-r.top)/r.height*100).toFixed(1);
+    btn.style.setProperty('--mx',x+'%');
+    btn.style.setProperty('--my',y+'%');
+  });
+});
+
+// HERO HALO — follow mouse subtly
+const heroEl=document.querySelector('.hero');
+if(heroEl){
+  heroEl.addEventListener('mousemove',e=>{
+    const r=heroEl.getBoundingClientRect();
+    const x=((e.clientX-r.left)/r.width-.5)*18;
+    const y=((e.clientY-r.top)/r.height-.5)*12;
+    if(hHalo)hHalo.style.transform=`translate(calc(-50% + ${x}px), calc(-52% + ${y}px))`;
+    if(hGlow)hGlow.style.transform=`translateX(calc(-50% + ${x*.5}px)) translateY(${y*.5}px)`;
+  });
+  heroEl.addEventListener('mouseleave',()=>{
+    if(hHalo)hHalo.style.transform='translate(-50%,-52%)';
+    if(hGlow)hGlow.style.transform='translateX(-50%)';
+  });
+}
+
+// MARQUEE pause on hover
+const track=document.querySelector('.marquee-track');
+if(track){
+  track.addEventListener('mouseenter',()=>track.style.animationPlayState='paused');
+  track.addEventListener('mouseleave',()=>track.style.animationPlayState='running');
+}
+</script>
+</body>
+</html>
